@@ -81,7 +81,7 @@ public class MainActivity extends AppCompatActivity{
         //Textfields
         // final TextView schritteText = findViewById(R.id.schritte);
         schrittanzahl = findViewById(R.id.schrittanzahl);
-        // schrittanzahl.setText("0");
+        // schrittanzahl.setText("0");ja
         createButtons();
     }
 
