@@ -5,7 +5,7 @@
         <activity android:name=".activities.LaufStartenActivity"></activity>
         <activity android:name=".activities.SchrittverlaufActivity" />
         <activity android:name=".activities.SynchronisierenActivity" />
-        <activity android:name=".activities.MainActivity">
+        <activity android:name=".activities.SchrittzaehlerActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
