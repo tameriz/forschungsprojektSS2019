@@ -58,10 +58,9 @@ import hs.f.forschungsprojektss2019.R;
  * for remote processes. A service does not provide a user interface.
  * */
 
-public class SchrittzaehlerActivity extends Activity implements SensorEventListener {
+public class SchrittzaehlerActivity extends Activity implements SensorEventListener{
 
-    private static final String PREFS =
-            SchrittzaehlerActivity.class.getName();
+    private static final String PREFS = SchrittzaehlerActivity.class.getName();
     private static final String PREFS_KEY = "last";
     private ProgressBar pb;
     private TextView steps;
@@ -72,9 +71,10 @@ public class SchrittzaehlerActivity extends Activity implements SensorEventListe
     private int last;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_schrittzaehler);
+        createButtons();
         pb = (ProgressBar) findViewById(R.id.pb);
         steps = (TextView) findViewById(R.id.steps);
         reset = (Button) findViewById(R.id.reset);
@@ -82,77 +82,107 @@ public class SchrittzaehlerActivity extends Activity implements SensorEventListe
             updateSharedPrefs(this, last);
             updateUI();
         });
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
             m = getSystemService(SensorManager.class);
-        }else
-        {
-            try {
+        } else{
+            try{
                 throw new Exception("TODO");
-            } catch (Exception e) {
+            } catch (Exception e){
                 e.printStackTrace();
             }
         }
         s = m.getDefaultSensor(Sensor.TYPE_STEP_COUNTER);
         onOff = (Switch) findViewById(R.id.on_off);
-        onOff.setOnCheckedChangeListener((buttonView, isChecked)
-                -> updateUI());
+        onOff.setOnCheckedChangeListener((buttonView, isChecked) -> updateUI());
         onOff.setChecked(s != null);
         updateUI();
     }
+
     @Override
-    protected void onResume() {
+    protected void onResume(){
         super.onResume();
         updateUI();
     }
+
     @Override
-    public void onSensorChanged(SensorEvent sensorEvent) {
+    public void onSensorChanged(SensorEvent sensorEvent){
         float[] values = sensorEvent.values;
         int _steps = (int) values[0];
         last = _steps;
-        SharedPreferences prefs = getSharedPreferences(
-                SchrittzaehlerActivity.PREFS,
-                Context.MODE_PRIVATE);
+        SharedPreferences prefs = getSharedPreferences(SchrittzaehlerActivity.PREFS, Context.MODE_PRIVATE);
         _steps -= prefs.getInt(PREFS_KEY, 0);
-        this.steps.setText(String.format(Locale.US,
-                "%d", _steps));
-        if (pb.getVisibility() == View.VISIBLE) {
+        this.steps.setText(String.format(Locale.US, "%d", _steps));
+        if (pb.getVisibility() == View.VISIBLE){
             pb.setVisibility(View.GONE);
             this.steps.setVisibility(View.VISIBLE);
             reset.setVisibility(View.VISIBLE);
-
         }
     }
+
     @Override
-    public void onAccuracyChanged(Sensor sensor, int i) {
+    public void onAccuracyChanged(Sensor sensor, int i){
     }
-    public static void updateSharedPrefs(Context context,
-                                         int last) {
-        SharedPreferences prefs =
-                context.getSharedPreferences(
-                        SchrittzaehlerActivity.PREFS,
-                        Context.MODE_PRIVATE);
+
+    public static void updateSharedPrefs(Context context, int last){
+        SharedPreferences prefs = context.getSharedPreferences(SchrittzaehlerActivity.PREFS, Context.MODE_PRIVATE);
         SharedPreferences.Editor edit = prefs.edit();
         edit.putInt(SchrittzaehlerActivity.PREFS_KEY, last);
         edit.apply();
     }
-    private void updateUI() {
+
+    private void updateUI(){
         reset.setVisibility(View.GONE);
         onOff.setEnabled(s != null);
-        if (s != null) {
+        if (s != null){
             steps.setVisibility(View.GONE);
-            if (onOff.isChecked()) {
-                m.registerListener(this, s,
-                        SensorManager.SENSOR_DELAY_UI);
+            if (onOff.isChecked()){
+                m.registerListener(this, s, SensorManager.SENSOR_DELAY_UI);
                 pb.setVisibility(View.VISIBLE);
-            } else {
+            } else{
                 m.unregisterListener(this);
                 pb.setVisibility(View.GONE);
             }
-        } else {
+        } else{
             steps.setVisibility(View.VISIBLE);
             //steps.setText(R.string.no_sensor);
             pb.setVisibility(View.GONE);
         }
+    }
+
+    private void createButtons(){
+        //Buttons
+        final Button schrittverlaufButton = findViewById(R.id.schrittverlauf);
+        schrittverlaufButton.setOnClickListener(new View.OnClickListener(){
+            public void onClick(View v){
+                // Läd Seite des Schrittverlaufs
+                setContentView(R.layout.activity_schrittverlauf);
+            }
+        });
+
+        final Button laufStartenButton = findViewById(R.id.laufStarten);
+        laufStartenButton.setOnClickListener(new View.OnClickListener(){
+            public void onClick(View v){
+                // Läd Seite "Lauf Starten"
+                setContentView(R.layout.activity_lauf_starten);
+            }
+        });
+
+        final Button synchronisierenButton = findViewById(R.id.synchronisieren);
+        synchronisierenButton.setOnClickListener(new View.OnClickListener(){
+            public void onClick(View v){
+                // Läd Seite "Synchronisieren"
+                setContentView(R.layout.activity_synchronisieren);
+            }
+        });
+
+        final Button beendenButton = findViewById(R.id.beenden);
+        beendenButton.setOnClickListener(new View.OnClickListener(){
+            public void onClick(View v){
+                // Beendet App
+                finish();
+                System.exit(0);
+            }
+        });
     }
 }
 
@@ -216,40 +246,6 @@ public class SchrittzaehlerActivity extends Activity implements SensorEventListe
 //
 //    }
 //
-//    private void createButtons(){
-//        //Buttons
-//        final Button schrittverlaufButton = findViewById(R.id.schrittverlauf);
-//        schrittverlaufButton.setOnClickListener(new View.OnClickListener(){
-//            public void onClick(View v){
-//                // Läd Seite des Schrittverlaufs
-//                setContentView(R.layout.activity_schrittverlauf);
-//            }
-//        });
-//
-//        final Button laufStartenButton = findViewById(R.id.laufStarten);
-//        laufStartenButton.setOnClickListener(new View.OnClickListener(){
-//            public void onClick(View v){
-//                // Läd Seite "Lauf Starten"
-//                setContentView(R.layout.activity_lauf_starten);
-//            }
-//        });
-//
-//        final Button synchronisierenButton = findViewById(R.id.synchronisieren);
-//        synchronisierenButton.setOnClickListener(new View.OnClickListener(){
-//            public void onClick(View v){
-//                // Läd Seite "Synchronisieren"
-//                setContentView(R.layout.activity_synchronisieren);
-//            }
-//        });
-//
-//        final Button beendenButton = findViewById(R.id.beenden);
-//        beendenButton.setOnClickListener(new View.OnClickListener(){
-//            public void onClick(View v){
-//                // Beendet App
-//                finish();
-//                System.exit(0);
-//            }
-//        });
-//
+
 //    }
 

@@ -24,6 +24,7 @@ import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothGatt;
 import android.bluetooth.BluetoothGattCallback;
 import android.bluetooth.BluetoothGattCharacteristic;
+import android.bluetooth.BluetoothGattDescriptor;
 import android.bluetooth.BluetoothGattService;
 import android.bluetooth.BluetoothManager;
 import android.bluetooth.BluetoothProfile;
@@ -41,8 +42,9 @@ import android.os.Handler;
 import android.util.Log;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.room.Room;
 import hs.f.forschungsprojektss2019.R;
-
+import hs.f.forschungsprojektss2019.dao.InAppDatabase;
 
 //Le = Lowenergy
 
@@ -58,11 +60,15 @@ public class SynchronisierenActivity extends AppCompatActivity{
     private List<ScanFilter> filters;
     private BluetoothGatt mGatt;
     private String BLUETOOTH_NAME="TODO";
+    //TODO
+    private java.util.UUID UUID;
+    private int propierties;
+    private int permissions;
 
     @Override
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_schrittzaehler);
         mHandler = new Handler();
         //Check if BLE is enabled on the device
         if (!getPackageManager().hasSystemFeature(PackageManager.FEATURE_BLUETOOTH_LE)){
@@ -216,6 +222,13 @@ public class SynchronisierenActivity extends AppCompatActivity{
             Log.i("onServicesDiscovered", services.toString());
            //TODO: MUSS ANGEPASST WERDEN AUF UNSEREN SERVICE
             gatt.readCharacteristic(services.get(1).getCharacteristics().get(0));
+
+            //TODO ????? WELCHES DAVON?
+            final BluetoothGattCharacteristic characteristic = new BluetoothGattCharacteristic(UUID,propierties,permissions);
+            gatt.writeCharacteristic(characteristic);
+
+            final BluetoothGattDescriptor descriptor = new BluetoothGattDescriptor(UUID,permissions);
+            gatt.writeDescriptor(descriptor);
         }
 
         @Override
@@ -223,5 +236,6 @@ public class SynchronisierenActivity extends AppCompatActivity{
             Log.i("onCharacteristicRead", characteristic.toString());
             gatt.disconnect();
         }
+
     };
 }

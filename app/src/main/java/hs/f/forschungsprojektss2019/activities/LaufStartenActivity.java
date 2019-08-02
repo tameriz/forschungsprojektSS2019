@@ -18,6 +18,7 @@ import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
 import hs.f.forschungsprojektss2019.R;
 
+@Deprecated
 public class LaufStartenActivity extends AppCompatActivity{
 
     @Override
