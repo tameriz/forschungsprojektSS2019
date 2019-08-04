@@ -13,6 +13,4 @@ public class SchrittverlaufActivity extends AppCompatActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_schrittverlauf);
     }
-
-    InAppDatabase db = Room.databaseBuilder(getApplicationContext(), InAppDatabase.class, "database-name").build();
 }
