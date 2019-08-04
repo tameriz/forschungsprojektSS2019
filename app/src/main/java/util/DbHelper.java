@@ -1,56 +1,36 @@
-/*
- * DbHelper.java
- *
- * Created on 2019-07-15
- *
- * Copyright (C) 2019 Volkswagen AG, All rights reserved.
- */
-
 package util;
 
+import java.util.List;
 import android.content.Context;
-import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteOpenHelper;
-import android.provider.BaseColumns;
+import androidx.room.Room;
+import hs.f.forschungsprojektss2019.dao.InAppDatabase;
+import hs.f.forschungsprojektss2019.dao.PedometerHistory;
 
-@Deprecated
-public final class DbHelper extends SQLiteOpenHelper{
+public class DbHelper{
 
-    public DbHelper(Context context){
-        super(context, DATABASE_NAME, null, DATABASE_VERSION);
+    InAppDatabase db;
+
+    public DbHelper(Context applicationContext){
+        db = Room.databaseBuilder(applicationContext, InAppDatabase.class, "PedometerHistory").build();
     }
 
-    /* Inner class that defines the table contents */
-    public static class FeedEntry implements BaseColumns{
-        public static final String TABLE_NAME = "pedometerstorage";
-        public static final String COLUMN_NAME_TITLE = "title";
-        public static final String COLUMN_NAME_SUBTITLE = "subtitle";
+    public List<PedometerHistory> getAllData(Context context){
+        return db.pedometerHistoryDao().getAllForAllUsers();
     }
 
-    private static final String SQL_CREATE_ENTRIES = "CREATE TABLE " + FeedEntry.TABLE_NAME + " (" + FeedEntry._ID
-                                                     + " INTEGER PRIMARY KEY," + FeedEntry.COLUMN_NAME_TITLE + " TEXT,"
-                                                     + FeedEntry.COLUMN_NAME_SUBTITLE + " TEXT)";
-
-    private static final String SQL_DELETE_ENTRIES = "DROP TABLE IF EXISTS " + FeedEntry.TABLE_NAME;
-
-    public static final int DATABASE_VERSION = 1;
-    public static final String DATABASE_NAME = "pedometer.db";
-
-    public void onCreate(SQLiteDatabase db){
-        db.execSQL(SQL_CREATE_ENTRIES);
+    public List<PedometerHistory> getAllDataForOneUser(Context context, String user){
+        return db.pedometerHistoryDao().getHistoryForSpecificUser(user);
     }
 
-    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion){
-        // This database is only a cache for online data, so its upgrade policy is
-        // to simply to discard the data and start over
-        db.execSQL(SQL_DELETE_ENTRIES);
-        onCreate(db);
+    public List<PedometerHistory> getAllData(Context context, String data, String user){
+        return db.pedometerHistoryDao().getStepsForASpecificDay(data, user);
     }
 
-    public void onDowngrade(SQLiteDatabase db, int oldVersion, int newVersion){
-        onUpgrade(db, oldVersion, newVersion);
+    public void insertData(PedometerHistory... value){
+        db.pedometerHistoryDao().insertAll(value);
     }
 
-
+    public void delteEntry(PedometerHistory value){
+        db.pedometerHistoryDao().delete(value);
+    }
 }
-

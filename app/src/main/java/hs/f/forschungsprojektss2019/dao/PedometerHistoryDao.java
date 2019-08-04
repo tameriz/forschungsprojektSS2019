@@ -1,34 +1,27 @@
-/*
- * PedometerHistoryDao.java
- *
- * Created on 2019-07-16
- *
- * Copyright (C) 2019 Volkswagen AG, All rights reserved.
- */
-
 package hs.f.forschungsprojektss2019.dao;
 
 import java.util.List;
-
-import javax.xml.datatype.XMLGregorianCalendar;
 
 import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.Query;
 
-    @Dao
-    public interface PedometerHistoryDao {
-        @Query("SELECT * FROM pedometerhistory")
-        List<PedometerHistory> getAll();
+@Dao
+public interface PedometerHistoryDao{
+    @Query("SELECT * FROM pedometerhistory")
+    List<PedometerHistory> getAllForAllUsers();
 
-        @Query("SELECT * FROM PedometerHistory WHERE date = :date")
-        List<PedometerHistory> getStepsForASpecificDay(int date);
+    @Query("SELECT * FROM PedometerHistory WHERE date = :date AND user = :user")
+    List<PedometerHistory> getStepsForASpecificDay(String date, String user); //Format of dd.mm.yyyy
 
-        @Insert
-        void insertAll(PedometerHistory... histories);
+    @Query("SELECT * FROM PedometerHistory WHERE user = :user")
+    List<PedometerHistory> getHistoryForSpecificUser(String user);
 
-        @Delete
-        void delete(PedometerHistory history);
-    }
+    @Insert
+    void insertAll(PedometerHistory... histories);
+
+    @Delete
+    void delete(PedometerHistory history);
+}
 

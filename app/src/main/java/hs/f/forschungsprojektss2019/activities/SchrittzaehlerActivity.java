@@ -1,17 +1,6 @@
-/*
- * MainActivity.java
- *
- * Created on 2019-07-04
- *
- * Copyright (C) 2019 Volkswagen AG, All rights reserved.
- */
-
-/*
- * MainActivity.java
- *
- */
-
 package hs.f.forschungsprojektss2019.activities;
+
+import java.util.Locale;
 
 import android.app.Activity;
 import android.content.Context;
@@ -27,9 +16,6 @@ import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.Switch;
 import android.widget.TextView;
-
-import java.util.Locale;
-
 import hs.f.forschungsprojektss2019.R;
 
 
@@ -156,14 +142,6 @@ public class SchrittzaehlerActivity extends Activity implements SensorEventListe
             public void onClick(View v){
                 // Läd Seite des Schrittverlaufs
                 setContentView(R.layout.activity_schrittverlauf);
-            }
-        });
-
-        final Button laufStartenButton = findViewById(R.id.laufStarten);
-        laufStartenButton.setOnClickListener(new View.OnClickListener(){
-            public void onClick(View v){
-                // Läd Seite "Lauf Starten"
-                setContentView(R.layout.activity_lauf_starten);
             }
         });
 

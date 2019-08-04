@@ -2,8 +2,6 @@
 
 package hs.f.forschungsprojektss2019.dao;
 
-import javax.xml.datatype.XMLGregorianCalendar;
-
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
@@ -13,10 +11,13 @@ public class PedometerHistory{
     @PrimaryKey
     public int id;
 
+    @ColumnInfo(name = "user")
+    public String user;
+
     @ColumnInfo(name = "date")
-    public int date; //TODO convert to XML Gregorian Calender
+    public String date;
 
     @ColumnInfo(name = "stepcount")
-    public int stepcount;
+    public String stepcount;
 }
 

@@ -1,4 +1,3 @@
-
 package hs.f.forschungsprojektss2019.dao;
 
 import androidx.room.Database;
