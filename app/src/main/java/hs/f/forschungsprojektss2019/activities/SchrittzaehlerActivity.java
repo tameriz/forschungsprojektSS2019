@@ -2,6 +2,7 @@ package hs.f.forschungsprojektss2019.activities;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
@@ -12,8 +13,8 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
-
 import hs.f.forschungsprojektss2019.R;
+import util.Schrittzaehler;
 import util.StepDetector;
 import util.StepListener;
 
@@ -112,6 +113,7 @@ public class SchrittzaehlerActivity extends Activity implements SensorEventListe
         schrittverlaufButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 // Läd Seite des Schrittverlaufs
+                startActivity(new Intent(getApplicationContext(), SchrittverlaufActivity.class));
                 setContentView(R.layout.activity_schrittverlauf);
             }
         });
@@ -120,6 +122,7 @@ public class SchrittzaehlerActivity extends Activity implements SensorEventListe
         synchronisierenButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 // Läd Seite "Synchronisieren"
+                startActivity(new Intent(getApplicationContext(), SynchronisierenActivity.class));
                 setContentView(R.layout.activity_synchronisieren);
             }
         });
