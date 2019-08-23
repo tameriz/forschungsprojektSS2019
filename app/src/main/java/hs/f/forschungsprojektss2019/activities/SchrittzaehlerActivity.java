@@ -8,13 +8,11 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
-import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import hs.f.forschungsprojektss2019.R;
-import util.Schrittzaehler;
 import util.StepDetector;
 import util.StepListener;
 
@@ -44,74 +42,61 @@ import util.StepListener;
  * for remote processes. A service does not provide a user interface.
  * */
 
-public class SchrittzaehlerActivity extends Activity implements SensorEventListener, StepListener {
+public class SchrittzaehlerActivity extends Activity implements SensorEventListener, StepListener{
 
     private static final String PREFS = SchrittzaehlerActivity.class.getName();
     private static final String PREFS_KEY = "last";
     private TextView steps;
-    private SensorManager m;
-    private Sensor s;
-    private int last;
-
-    private TextView textView;
-    private StepDetector simpleStepDetector;
     private SensorManager sensorManager;
-    private Sensor accel;
+    private Sensor sensor;
+
+    private StepDetector simpleStepDetector;
     private static final String TEXT_NUM_STEPS = "Number of Steps: ";
     private int numSteps;
-    private TextView TvSteps;
-
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
+
+        SensorManager sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
+        sensor = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+        sensorManager.registerListener(this, sensor, SensorManager.SENSOR_STATUS_ACCURACY_HIGH);
+        simpleStepDetector = new StepDetector();
+        simpleStepDetector.registerListener(this);
+
         setContentView(R.layout.activity_schrittzaehler);
-
-
         createButtons();
         steps = (TextView) findViewById(R.id.steps);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            m = getSystemService(SensorManager.class);
-        } else {
-            try {
-                throw new Exception("TODO");
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-        s = m.getDefaultSensor(Sensor.TYPE_STEP_COUNTER);
-
     }
 
     @Override
-    protected void onResume() {
+    protected void onResume(){
         super.onResume();
     }
 
     @Override
-    public void onSensorChanged(SensorEvent event) {
-        if (event.sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
-            simpleStepDetector.updateAccel(
-                    event.timestamp, event.values[0], event.values[1], event.values[2]);
+    public void onSensorChanged(SensorEvent event){
+        if (event.sensor.getType() == Sensor.TYPE_ACCELEROMETER){
+            simpleStepDetector.updateAccel(event.timestamp, event.values[0], event.values[1], event.values[2]);
         }
     }
 
     @Override
-    public void onAccuracyChanged(Sensor sensor, int i) {
+    public void onAccuracyChanged(Sensor sensor, int i){
     }
 
-    public static void updateSharedPrefs(Context context, int last) {
+    public static void updateSharedPrefs(Context context, int last){
         SharedPreferences prefs = context.getSharedPreferences(SchrittzaehlerActivity.PREFS, Context.MODE_PRIVATE);
         SharedPreferences.Editor edit = prefs.edit();
         edit.putInt(SchrittzaehlerActivity.PREFS_KEY, last);
         edit.apply();
     }
 
-    private void createButtons() {
+    private void createButtons(){
         //Buttons
         final Button schrittverlaufButton = findViewById(R.id.schrittverlauf);
-        schrittverlaufButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
+        schrittverlaufButton.setOnClickListener(new View.OnClickListener(){
+            public void onClick(View v){
                 // Läd Seite des Schrittverlaufs
                 startActivity(new Intent(getApplicationContext(), SchrittverlaufActivity.class));
                 setContentView(R.layout.activity_schrittverlauf);
@@ -119,8 +104,8 @@ public class SchrittzaehlerActivity extends Activity implements SensorEventListe
         });
 
         final Button synchronisierenButton = findViewById(R.id.synchronisieren);
-        synchronisierenButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
+        synchronisierenButton.setOnClickListener(new View.OnClickListener(){
+            public void onClick(View v){
                 // Läd Seite "Synchronisieren"
                 startActivity(new Intent(getApplicationContext(), SynchronisierenActivity.class));
                 setContentView(R.layout.activity_synchronisieren);
@@ -128,8 +113,8 @@ public class SchrittzaehlerActivity extends Activity implements SensorEventListe
         });
 
         final Button beendenButton = findViewById(R.id.beenden);
-        beendenButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
+        beendenButton.setOnClickListener(new View.OnClickListener(){
+            public void onClick(View v){
                 // Beendet App
                 finish();
                 System.exit(0);
@@ -138,71 +123,9 @@ public class SchrittzaehlerActivity extends Activity implements SensorEventListe
     }
 
     @Override
-    public void step(long timeNs) {
+    public void step(long timeNs){
         numSteps++;
-        TvSteps.setText(TEXT_NUM_STEPS + numSteps);
+        steps.setText(TEXT_NUM_STEPS + numSteps);
     }
 }
-
-//
-//    private boolean isRunning;
-//    private TextView schrittanzahl;
-//    //Wird benötigt um Schritt täglich zu resetten
-//    //private AlarmClock resetClock;
-//
-//    //Listener
-//    SensorEventListener sensorEventListenerCounter = new SensorEventListener(){
-//        @Override
-//        public void onAccuracyChanged(Sensor sensor, int accuracy){
-//        }
-//
-//        @Override
-//        public void onSensorChanged(SensorEvent event){
-//            aktuelleSchritte = event.values[0];
-//            schrittanzahl.setText((int) aktuelleSchritte);
-//        }
-//    };
-//
-//    @Override
-//    protected void onCreate(Bundle savedInstanceState){
-//        super.onCreate(savedInstanceState);
-//        //Startbildschrim
-//        setContentView(R.layout.activity_schrittzaehler);
-//        //Textfields
-//        // final TextView schritteText = findViewById(R.id.schritte);
-//        schrittanzahl = findViewById(R.id.schrittanzahl);
-//        // schrittanzahl.setText("0");
-//        createButtons();
-//    }
-//
-//    @Override
-//    protected void onResume(){
-//        super.onResume();
-//        isRunning = true;
-//        createStepCounter();
-//    }
-//
-//    @Override
-//    protected void onPause(){
-//        super.onPause();
-//        isRunning = false;
-//    }
-//
-//    // von Marius geschrieben
-//    private void createStepCounter(){
-//        //von Marius
-//        /* final SensorManager sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
-//        final Sensor sensorStepCounter = sensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER);
-//        //final Sensor sensorStepDetector = sensorManager.getDefaultSensor(Sensor.TYPE_STEP_DETECTOR);
-//
-//        if (sensorStepCounter != null){
-//            sensorManager.registerListener(sensorEventListenerCounter, sensorStepCounter,
-//                                           SensorManager.SENSOR_DELAY_UI);
-//        } else{
-//            Toast.makeText(this, "Sensor Sensor.TYPE_STEP_COUNTER wurde nicht gefunden", Toast.LENGTH_SHORT).show();
-//        }*/
-//
-//    }
-//
-//    }
 

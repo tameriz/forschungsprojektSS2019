@@ -239,8 +239,6 @@ public class SynchronisierenActivity extends Activity{
         return uuids;
     }
 
-    // Boilerplate code from the activity creation:
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu){
 

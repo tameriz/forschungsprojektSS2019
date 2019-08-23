@@ -86,7 +86,7 @@ public class SchrittverlaufActivity extends Activity{
         final PedometerHistory ph7 = new PedometerHistory();
         ph7.date = "11.08.2019";
         ph7.user = "user1";
-        ph7.stepcount = "100000";
+        ph7.stepcount = "10000";
 
         List<PedometerHistory> pedometerHistoriesList = new ArrayList<>();
         pedometerHistoriesList.add(ph1);
@@ -106,6 +106,7 @@ public class SchrittverlaufActivity extends Activity{
 
         int i = 0;
         for (PedometerHistory ph : dummyData ){
+            final BarEntry entry = new BarEntry(i, Integer.parseInt(ph.stepcount));
             entries.add(new BarEntry(i, Integer.parseInt(ph.stepcount)));
             i++;
         }

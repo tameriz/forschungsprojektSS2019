@@ -1,6 +1,6 @@
 package util;
 
-public class StepDetector {
+public class StepDetector{
 
     private static final int ACCEL_RING_SIZE = 50;
     private static final int VEL_RING_SIZE = 10;
@@ -21,12 +21,11 @@ public class StepDetector {
 
     private StepListener listener;
 
-    public void registerListener(StepListener listener) {
+    public void registerListener(StepListener listener){
         this.listener = listener;
     }
 
-
-    public void updateAccel(long timeNs, float x, float y, float z) {
+    public void updateAccel(long timeNs, float x, float y, float z){
         float[] currentAccel = new float[3];
         currentAccel[0] = x;
         currentAccel[1] = y;
@@ -55,8 +54,9 @@ public class StepDetector {
 
         float velocityEstimate = SensorFilter.sum(velRing);
 
-        if (velocityEstimate > STEP_THRESHOLD && oldVelocityEstimate <= STEP_THRESHOLD
-                && (timeNs - lastStepTimeNs > STEP_DELAY_NS)) {
+        //Check if the movement is a real Step!
+        if (velocityEstimate > STEP_THRESHOLD && oldVelocityEstimate <= STEP_THRESHOLD && (timeNs - lastStepTimeNs
+                                                                                           > STEP_DELAY_NS)){
             listener.step(timeNs);
             lastStepTimeNs = timeNs;
         }
