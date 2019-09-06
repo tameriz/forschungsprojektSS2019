@@ -65,7 +65,6 @@ public class SchrittzaehlerActivity extends Activity implements SensorEventListe
         sensorManager.registerListener(this, sensor, SensorManager.SENSOR_STATUS_ACCURACY_HIGH);
         simpleStepDetector = new StepDetector();
         simpleStepDetector.registerListener(this);
-
         setContentView(R.layout.activity_schrittzaehler);
         createButtons();
         steps = (TextView) findViewById(R.id.steps);
@@ -136,7 +135,7 @@ public class SchrittzaehlerActivity extends Activity implements SensorEventListe
     @Override
     public void step(long timeNs){
         numSteps++;
-        steps.setText(TEXT_NUM_STEPS + numSteps);
+        steps.setText(numSteps);
     }
 
     private void test(){

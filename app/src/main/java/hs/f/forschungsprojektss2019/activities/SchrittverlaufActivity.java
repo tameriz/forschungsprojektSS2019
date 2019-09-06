@@ -121,8 +121,8 @@ public class SchrittverlaufActivity extends Activity{
         }
 
         BarDataSet dataSet = new BarDataSet(entries, "History");
-        dataSet.setBarBorderColor(Color.BLACK);
-        dataSet.setColor(Color.LTGRAY);
+        dataSet.setBarBorderColor(Color.GREEN);
+        dataSet.setColor(Color.BLACK);
         dataSet.setBarBorderWidth(1);
         dataSet.setBarShadowColor(2);
         dataSet.setValueTextColor(3);
