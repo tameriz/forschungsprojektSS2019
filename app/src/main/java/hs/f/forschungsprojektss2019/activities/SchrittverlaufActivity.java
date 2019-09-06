@@ -10,6 +10,7 @@ import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
@@ -29,6 +30,14 @@ public class SchrittverlaufActivity extends Activity{
         chart.setData(addTestdataToBar());
         final View layout = findViewById(R.id.schrittverlauf);
         //chart.invalidate(); // refresh
+
+    }
+
+    @Override
+    public void onBackPressed(){
+        finish();
+        startActivity(new Intent(getApplicationContext(), SchrittzaehlerActivity.class));
+        setContentView(R.layout.activity_schrittzaehler);
     }
 
     @Override
@@ -105,7 +114,7 @@ public class SchrittverlaufActivity extends Activity{
         final List<PedometerHistory> dummyData = createTestData();
 
         int i = 0;
-        for (PedometerHistory ph : dummyData ){
+        for (PedometerHistory ph : dummyData){
             final BarEntry entry = new BarEntry(i, Integer.parseInt(ph.stepcount));
             entries.add(new BarEntry(i, Integer.parseInt(ph.stepcount)));
             i++;

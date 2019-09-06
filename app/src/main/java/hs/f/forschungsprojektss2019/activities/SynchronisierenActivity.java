@@ -15,6 +15,7 @@ import android.bluetooth.BluetoothGatt;
 import android.bluetooth.BluetoothGattCallback;
 import android.bluetooth.BluetoothGattCharacteristic;
 import android.bluetooth.BluetoothGattDescriptor;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -118,12 +119,19 @@ public class SynchronisierenActivity extends Activity{
         }
     };
 
+
+    @Override
+    public void onBackPressed(){
+        finish();
+        startActivity(new Intent(getApplicationContext(), SchrittzaehlerActivity.class));
+        setContentView(R.layout.activity_schrittzaehler);
+    }
+
     // OnCreate, called once to initialize the activity.
     @Override
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_schrittzaehler);
-
         // Grab references to UI elements.
         messages = (TextView) findViewById(R.id.message);
         //input = (EditText) findViewById(R.id.input);

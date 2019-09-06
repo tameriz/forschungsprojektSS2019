@@ -24,7 +24,7 @@ android {
 }
 
 repositories {
-    maven { url 'https://jitpack.io' }
+    maven {url 'https://jitpack.io'}
 }
 
 dependencies {
@@ -36,7 +36,8 @@ dependencies {
     androidTestImplementation 'androidx.test:runner:1.2.0'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
     //room
-    def room_version = "2.2.0-alpha01" // 2.1.0 for latest stable version
+    def room_version = "2.2.0-alpha01"
+    // 2.1.0 for latest stable version
     implementation "androidx.room:room-runtime:$room_version"
     annotationProcessor "androidx.room:room-compiler:$room_version"
 }

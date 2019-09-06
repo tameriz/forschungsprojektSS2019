@@ -1,6 +1,7 @@
 package hs.f.forschungsprojektss2019.activities;
 
 import android.app.Activity;
+import android.app.AlarmManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -8,6 +9,7 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.icu.util.Calendar;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -120,12 +122,31 @@ public class SchrittzaehlerActivity extends Activity implements SensorEventListe
                 System.exit(0);
             }
         });
+
+        final Button infoButton = findViewById(R.id.info);
+        infoButton.setOnClickListener(new View.OnClickListener(){
+            public void onClick(View v){
+                // Info über App anzeigen
+                startActivity(new Intent(getApplicationContext(), InfoActivity.class));
+                setContentView(R.layout.activity_info);
+            }
+        });
     }
 
     @Override
     public void step(long timeNs){
         numSteps++;
         steps.setText(TEXT_NUM_STEPS + numSteps);
+    }
+
+    private void test(){
+        Calendar now = Calendar.getInstance();
+        int jahr = now.get(Calendar.YEAR);
+        int tag = now.get(Calendar.MONTH) + 1;
+        int monat = now.get(Calendar.DAY_OF_MONTH);
+        now.set(jahr, monat, tag, 16, 00);
+        long startTime = now.getTimeInMillis();
+        final AlarmManager alarmManager;
     }
 }
 
