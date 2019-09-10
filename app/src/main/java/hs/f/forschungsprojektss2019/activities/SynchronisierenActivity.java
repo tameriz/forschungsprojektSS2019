@@ -34,7 +34,7 @@ public class SynchronisierenActivity extends Activity{
     public static UUID CLIENT_UUID = UUID.fromString("00002902-0000-1000-8000-00805f9b34fb");
 
     // UI elements
-    private TextView messages;
+    //private TextView messages;
     private EditText input;
 
     // BTLE state
@@ -61,7 +61,6 @@ public class SynchronisierenActivity extends Activity{
                 writeLine("Connection state changed.  New state: " + newState);
             }
         }
-
         // Called when services have been discovered on the remote device.
         // It seems to be necessary to wait for this discovery to occur before
         // manipulating any services or characteristics.
@@ -131,11 +130,10 @@ public class SynchronisierenActivity extends Activity{
     @Override
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_schrittzaehler);
+        setContentView(R.layout.activity_synchronisieren);
         // Grab references to UI elements.
-        messages = (TextView) findViewById(R.id.message);
+        //messages = (TextView) findViewById(R.id.message);
         //input = (EditText) findViewById(R.id.input);
-
         adapter = BluetoothAdapter.getDefaultAdapter();
     }
 
@@ -146,7 +144,7 @@ public class SynchronisierenActivity extends Activity{
         // Scan for all BTLE devices.
         // The first one with the UART service will be chosen--see the code in the scanCallback.
         writeLine("Scanning for devices...");
-        adapter.startLeScan(scanCallback);
+//        adapter.startLeScan(scanCallback);
     }
 
     // OnStop, called right before the activity loses foreground focus.  Close the BTLE connection.
@@ -186,8 +184,8 @@ public class SynchronisierenActivity extends Activity{
         runOnUiThread(new Runnable(){
             @Override
             public void run(){
-                messages.append(text);
-                messages.append("\n");
+                //messages.append(text);
+                //messages.append("\n");
             }
         });
     }
@@ -266,4 +264,5 @@ public class SynchronisierenActivity extends Activity{
         }
         return super.onOptionsItemSelected(item);
     }
+
 }
