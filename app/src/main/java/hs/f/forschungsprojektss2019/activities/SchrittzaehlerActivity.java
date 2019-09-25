@@ -1,20 +1,25 @@
 package hs.f.forschungsprojektss2019.activities;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import android.app.Activity;
 import android.app.AlarmManager;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.icu.util.Calendar;
+import android.net.wifi.WifiInfo;
+import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import hs.f.forschungsprojektss2019.R;
+import util.DbHelper;
 import util.StepDetector;
 import util.StepListener;
 
@@ -46,28 +51,51 @@ import util.StepListener;
 
 public class SchrittzaehlerActivity extends Activity implements SensorEventListener, StepListener{
 
-    private static final String PREFS = SchrittzaehlerActivity.class.getName();
-    private static final String PREFS_KEY = "last";
     private TextView steps;
     private SensorManager sensorManager;
     private Sensor sensor;
-
     private StepDetector simpleStepDetector;
-    private static final String TEXT_NUM_STEPS = "Number of Steps: ";
     private int numSteps;
+    private DbHelper dbHelper;
+    private String today;
 
     @Override
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_schrittzaehler);
+        //Flush DB (for test)
+        //getApplicationContext().deleteDatabase("PedometerHistory");
+        dbHelper = new DbHelper(getApplicationContext());
+        getDateOfToday();
 
         SensorManager sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
         sensor = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
         sensorManager.registerListener(this, sensor, SensorManager.SENSOR_STATUS_ACCURACY_HIGH);
+
+        steps = (TextView) findViewById(R.id.steps);
+        setNumSteps();
+
         simpleStepDetector = new StepDetector();
         simpleStepDetector.registerListener(this);
-        setContentView(R.layout.activity_schrittzaehler);
+
         createButtons();
-        steps = (TextView) findViewById(R.id.steps);
+        steps.setText(String.valueOf(numSteps));
+    }
+
+    private void setNumSteps(){
+        if (dbHelper.getAllDataForASpecificDay(getApplicationContext(), today, getMacAddress()).isEmpty()){
+            numSteps = 0;
+        } else{
+            numSteps = Integer.valueOf(
+                    dbHelper.getAllDataForASpecificDay(getApplicationContext(), today, getMacAddress())
+                            .get(0).stepcount);
+        }
+    }
+
+    private void getDateOfToday(){
+        Date c = Calendar.getInstance().getTime();
+        SimpleDateFormat df = new SimpleDateFormat("dd-MM-yyyy");
+        today = df.format(c);
     }
 
     @Override
@@ -84,13 +112,6 @@ public class SchrittzaehlerActivity extends Activity implements SensorEventListe
 
     @Override
     public void onAccuracyChanged(Sensor sensor, int i){
-    }
-
-    public static void updateSharedPrefs(Context context, int last){
-        SharedPreferences prefs = context.getSharedPreferences(SchrittzaehlerActivity.PREFS, Context.MODE_PRIVATE);
-        SharedPreferences.Editor edit = prefs.edit();
-        edit.putInt(SchrittzaehlerActivity.PREFS_KEY, last);
-        edit.apply();
     }
 
     private void createButtons(){
@@ -116,6 +137,7 @@ public class SchrittzaehlerActivity extends Activity implements SensorEventListe
         final Button beendenButton = findViewById(R.id.beenden);
         beendenButton.setOnClickListener(new View.OnClickListener(){
             public void onClick(View v){
+                saveStepsInDb();
                 // Beendet App
                 finish();
                 System.exit(0);
@@ -130,12 +152,37 @@ public class SchrittzaehlerActivity extends Activity implements SensorEventListe
                 setContentView(R.layout.activity_info);
             }
         });
+
+        final Button debugButton = findViewById(R.id.debug);
+        debugButton.setOnClickListener(new View.OnClickListener(){
+            public void onClick(View v){
+                // BLE DEBUG anzeigen
+                startActivity(new Intent(getApplicationContext(), BluetoothConnector.class));
+                setContentView(R.layout.activity_bluetooth);
+            }
+        });
+    }
+
+    private void saveStepsInDb(){
+        if (dbHelper.getAllDataForASpecificDay(getApplicationContext(), today, getMacAddress()).isEmpty()){
+            dbHelper.insertData(
+                    dbHelper.createPedemeterHistoryObject(getMacAddress(), today, String.valueOf(numSteps)));
+        } else{
+            dbHelper.updateEntry(
+                    dbHelper.createPedemeterHistoryObject(getMacAddress(), today, String.valueOf(numSteps)));
+        }
     }
 
     @Override
     public void step(long timeNs){
         numSteps++;
-        steps.setText(numSteps);
+        steps.setText(String.valueOf(numSteps));
+    }
+
+    private String getMacAddress(){
+        WifiManager manager = (WifiManager) getSystemService(Context.WIFI_SERVICE);
+        WifiInfo info = manager.getConnectionInfo();
+        return info.getMacAddress();
     }
 
     private void test(){

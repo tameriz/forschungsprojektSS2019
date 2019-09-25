@@ -1,6 +1,7 @@
 package util;
 
 import java.util.List;
+
 import android.content.Context;
 import androidx.room.Room;
 import hs.f.forschungsprojektss2019.dao.InAppDatabase;
@@ -11,10 +12,10 @@ public class DbHelper{
     InAppDatabase db;
 
     public DbHelper(Context applicationContext){
-        db = Room.databaseBuilder(applicationContext, InAppDatabase.class, "PedometerHistory").build();
+        db = Room.databaseBuilder(applicationContext, InAppDatabase.class, "PedometerHistory").allowMainThreadQueries().build();
     }
 
-    public List<PedometerHistory> getAllData(Context context){
+    public List<PedometerHistory> getAllDataForAllUsers(Context context){
         return db.pedometerHistoryDao().getAllForAllUsers();
     }
 
@@ -22,7 +23,7 @@ public class DbHelper{
         return db.pedometerHistoryDao().getHistoryForSpecificUser(user);
     }
 
-    public List<PedometerHistory> getAllData(Context context, String data, String user){
+    public List<PedometerHistory> getAllDataForASpecificDay(Context context, String data, String user){
         return db.pedometerHistoryDao().getStepsForASpecificDay(data, user);
     }
 
@@ -30,7 +31,20 @@ public class DbHelper{
         db.pedometerHistoryDao().insertAll(value);
     }
 
-    public void delteEntry(PedometerHistory value){
+    public void deleteEntry(PedometerHistory value){
         db.pedometerHistoryDao().delete(value);
+    }
+
+    public void updateEntry(PedometerHistory value){
+        db.pedometerHistoryDao().update(value);
+    }
+
+    public PedometerHistory createPedemeterHistoryObject(String user, String date, String stepcount){
+        PedometerHistory pedometerHistory = new PedometerHistory();
+        pedometerHistory.user = user;
+        pedometerHistory.date = date;
+        pedometerHistory.stepcount = stepcount;
+
+        return pedometerHistory;
     }
 }

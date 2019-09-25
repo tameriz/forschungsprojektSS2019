@@ -6,6 +6,7 @@ import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.Query;
+import androidx.room.Update;
 
 @Dao
 public interface PedometerHistoryDao{
@@ -23,5 +24,8 @@ public interface PedometerHistoryDao{
 
     @Delete
     void delete(PedometerHistory history);
+
+    @Update
+    void update(PedometerHistory history);
 }
 
