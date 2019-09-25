@@ -1,11 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!--
-  ~ activity_info.xml
-  ~
-  ~ Created on 2019-09-06
-  ~
-  ~ Copyright (C) 2019 Volkswagen AG, All rights reserved.
-  -->
 
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android" xmlns:tools="http://schemas.android.com/tools" xmlns:app="http://schemas.android.com/apk/res-auto" android:layout_width="match_parent" android:layout_height="match_parent" tools:context=".activities.InfoActivity">
 
@@ -19,7 +12,7 @@
 
         <Space android:layout_width="match_parent" android:layout_height="19dp" android:background="#AA00FF" />
         <LinearLayout android:orientation="vertical" android:layout_width="match_parent" android:layout_height="408dp" android:background="#64DD17" android:layout_marginEnd="40dp" android:layout_marginStart="40dp" >
-            <TextView android:text="Forschungsprojekt SS 2019 \n\n Entwickler: \n Hackenberg Marius \n Ilgüz Tamer \n\n Betreuer:\nProf. Dr. Martine Herpers \n\n Aufgabe:\n Entwicklung einer Schrittzähler-App mit Anbindung an das RIGL-System." android:layout_width="match_parent" android:layout_height="match_parent" android:id="@+id/message" android:textStyle="bold" android:textSize="18sp" android:textColor="#000000" android:textAlignment="center" />
+            <TextView android:text="Forschungsprojekt SS 2019 \n\n Entwickler: \n Hackenberg Marius \n Ilgüz Tamer \n\n Betreuerin:\nProf. Dr. Martine Herpers \n\n Aufgabe:\n Entwicklung einer Schrittzähler-App mit Anbindung an das RIGL-System." android:layout_width="match_parent" android:layout_height="match_parent" android:id="@+id/message" android:textStyle="bold" android:textSize="18sp" android:textColor="#000000" android:textAlignment="center" />
         </LinearLayout>
 
     </LinearLayout>

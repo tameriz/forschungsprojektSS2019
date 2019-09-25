@@ -1,5 +1,6 @@
 package util;
 
+//StepDectector which handles most of the pedometer logic
 public class StepDetector{
 
     private static final int ACCEL_RING_SIZE = 50;

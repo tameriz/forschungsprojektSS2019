@@ -14,6 +14,7 @@ import javax.crypto.NoSuchPaddingException;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
 
+//AESCodec for encrypt and decrypt strings which will be send
 public class AESCodec{
 
     public static SecretKey generateKey(String password) throws NoSuchAlgorithmException, InvalidKeySpecException{

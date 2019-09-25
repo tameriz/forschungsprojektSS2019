@@ -1,11 +1,3 @@
-/*
- * SynchronisierenActivity.java
- *
- * Created on 2019-09-13
- *
- * Copyright (C) 2019 Volkswagen AG, All rights reserved.
- */
-
 package hs.f.forschungsprojektss2019.activities;
 
 import java.nio.charset.Charset;
@@ -28,6 +20,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import hs.f.forschungsprojektss2019.R;
 
+//SynchronisierenActivity to handle Snyc with App and Hub
 public class SynchronisierenActivity extends Activity{
 
     private BluetoothLeAdvertiser advertiser;
@@ -37,22 +30,27 @@ public class SynchronisierenActivity extends Activity{
     public SynchronisierenActivity(){
     }
 
-
     @Override
     protected void onCreate(final Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.activity_synchronisieren);
+        try{
+            if (!BluetoothAdapter.getDefaultAdapter().isMultipleAdvertisementSupported()){
+                Toast.makeText(this, "Multiple advertisement not supported", Toast.LENGTH_SHORT).show();
+            }
 
-        if( !BluetoothAdapter.getDefaultAdapter().isMultipleAdvertisementSupported() ) {
-            Toast.makeText(this, "Multiple advertisement not supported", Toast.LENGTH_SHORT).show();
+            setContentView(R.layout.activity_synchronisieren);
 
             textfield = (TextView) findViewById(R.id.message);
-            textfield.append(getMacAddress());
+            textfield.append("MacAdress " + getMacAddress() + "\n");
+            textfield.append(BluetoothAdapter.getDefaultAdapter().getAddress() + " BlEAdapter Address \n");
+            textfield.append("Uuid " + parcelUuid.toString() + "\n");
 
             getBleAdvertiser();
             AdvertiseSettings settings = getAdvertiseSettings();
             createAdvertiserCallBackAndStartAdvertising(settings);
+        } catch (Exception e){
+            textfield.append(e.getMessage());
         }
     }
 
@@ -65,36 +63,35 @@ public class SynchronisierenActivity extends Activity{
     private void createAdvertiserCallBackAndStartAdvertising(final AdvertiseSettings settings){
         ParcelUuid pUuid = new ParcelUuid(parcelUuid);
 
+        //REAL DATA HERE
         String stringToSend = "TESTITEST";
 
-        AdvertiseData data = new AdvertiseData.Builder()
-                .setIncludeDeviceName( true )
-                .addServiceUuid( pUuid )
-                .addServiceData( pUuid, stringToSend.getBytes(Charset.forName("UTF-8")))
-                .build();
+        AdvertiseData data = new AdvertiseData.Builder().setIncludeDeviceName(true).addServiceUuid(pUuid)
+                                                        .addServiceData(pUuid,
+                                                                        stringToSend.getBytes(Charset.forName("UTF-8")))
+                                                        .build();
 
-        AdvertiseCallback advertisingCallback = new AdvertiseCallback() {
+        AdvertiseCallback advertisingCallback = new AdvertiseCallback(){
             @Override
-            public void onStartSuccess(AdvertiseSettings settingsInEffect) {
+            public void onStartSuccess(AdvertiseSettings settingsInEffect){
                 super.onStartSuccess(settingsInEffect);
             }
 
             @Override
-            public void onStartFailure(int errorCode) {
+            public void onStartFailure(int errorCode){
                 Log.e("BLE", "Advertising onStartFailure: " + errorCode);
                 super.onStartFailure(errorCode);
             }
         };
-        advertiser.startAdvertising( settings, data, advertisingCallback );
+        advertiser.startAdvertising(settings, data, advertisingCallback);
+        textfield.append("\n Start Advertising \n");
     }
 
     private AdvertiseSettings getAdvertiseSettings(){
         //Create Advertising Settings
-        return new AdvertiseSettings.Builder()
-                .setAdvertiseMode( AdvertiseSettings.ADVERTISE_MODE_LOW_LATENCY )
-                .setTxPowerLevel( AdvertiseSettings.ADVERTISE_TX_POWER_HIGH )
-                .setConnectable( false )
-                .build();
+        return new AdvertiseSettings.Builder().setAdvertiseMode(AdvertiseSettings.ADVERTISE_MODE_LOW_LATENCY)
+                                              .setTxPowerLevel(AdvertiseSettings.ADVERTISE_TX_POWER_HIGH)
+                                              .setConnectable(false).build();
     }
 
     private void getBleAdvertiser(){
@@ -114,7 +111,6 @@ public class SynchronisierenActivity extends Activity{
 
     @Override
     public void onBackPressed(){
-        finish();
         startActivity(new Intent(getApplicationContext(), SchrittzaehlerActivity.class));
         setContentView(R.layout.activity_schrittzaehler);
     }

@@ -10,13 +10,17 @@ import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.net.wifi.WifiInfo;
+import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.view.View;
 import hs.f.forschungsprojektss2019.R;
 import hs.f.forschungsprojektss2019.dao.PedometerHistory;
 
+//SchrittverlaufActivity to display histroy of the pedometerDataSet
 public class SchrittverlaufActivity extends Activity{
 
     @Override
@@ -109,9 +113,20 @@ public class SchrittverlaufActivity extends Activity{
         return pedometerHistoriesList;
     }
 
+    private String getMacAddress(){
+        WifiManager manager = (WifiManager) getSystemService(Context.WIFI_SERVICE);
+        WifiInfo info = manager.getConnectionInfo();
+        return info.getMacAddress();
+    }
+
     private BarData addTestdataToBar(){
         List<BarEntry> entries = new ArrayList<BarEntry>();
         final List<PedometerHistory> dummyData = createTestData();
+
+        //REAL CODE not for presentation (Change dummyData to realData in the following for loop
+        //final DbHelper dbHelper = new DbHelper(getApplicationContext());
+        //final List<PedometerHistory> realData = dbHelper.getAllDataForOneUser(getApplicationContext(),getMacAddress
+        // ());
 
         int i = 0;
         for (PedometerHistory ph : dummyData){

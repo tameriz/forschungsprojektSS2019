@@ -4,7 +4,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import android.app.Activity;
-import android.app.AlarmManager;
 import android.content.Context;
 import android.content.Intent;
 import android.hardware.Sensor;
@@ -23,32 +22,7 @@ import util.DbHelper;
 import util.StepDetector;
 import util.StepListener;
 
-
-/*
- *
- * Wichtige Links:
- *
- * ALARMCLOCK
- * https://stackoverflow.com/questions/4459058/alarm-manager-example/8801990#8801990
- *https://developer.android.com/reference/android/provider/AlarmClock
- *
- * SHARED PREFERENCES
- * https://developer.android.com/training/data-storage/shared-preferences#java
- *
- * ROOM DATABASE
- *https://developer.android.com/training/data-storage/room#java
- *
- *
- * Bluethooth-Low-Energy
- *
- *https://developer.android.com/guide/topics/connectivity/bluetooth-le#java
- *
- * Info unterschied Activiy und Service (wir brauchen also auch einen Service/Code muss nochma rumgeschubst werden:
- * An activity is implemented as a subclass of Activity and you can learn more about it in the Activities developer
- * guide. A service is a component that runs in the background to perform long-running operations or to perform work
- * for remote processes. A service does not provide a user interface.
- * */
-
+//SchrittzaehlerActivity = MAIN ACTIVITY . Handles Pedemeter.
 public class SchrittzaehlerActivity extends Activity implements SensorEventListener, StepListener{
 
     private TextView steps;
@@ -183,16 +157,6 @@ public class SchrittzaehlerActivity extends Activity implements SensorEventListe
         WifiManager manager = (WifiManager) getSystemService(Context.WIFI_SERVICE);
         WifiInfo info = manager.getConnectionInfo();
         return info.getMacAddress();
-    }
-
-    private void test(){
-        Calendar now = Calendar.getInstance();
-        int jahr = now.get(Calendar.YEAR);
-        int tag = now.get(Calendar.MONTH) + 1;
-        int monat = now.get(Calendar.DAY_OF_MONTH);
-        now.set(jahr, monat, tag, 16, 00);
-        long startTime = now.getTimeInMillis();
-        final AlarmManager alarmManager;
     }
 }
 

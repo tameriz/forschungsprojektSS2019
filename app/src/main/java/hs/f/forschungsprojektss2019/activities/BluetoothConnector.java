@@ -1,11 +1,3 @@
-/*
- * BluetoothConnector.java
- *
- * Created on 2019-09-25
- *
- * Copyright (C) 2019 Volkswagen AG, All rights reserved.
- */
-
 package hs.f.forschungsprojektss2019.activities;
 
 import java.io.IOException;
@@ -36,6 +28,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import hs.f.forschungsprojektss2019.R;
 
+//BluetoothConnector-Class for Debugging BLE
 public class BluetoothConnector extends AppCompatActivity{
 
     public static final int REQUEST_ENABLE_BT = 1;
@@ -101,7 +94,7 @@ public class BluetoothConnector extends AppCompatActivity{
         CharSequence headtextold = headtext.getText();
         initialize_layout();
         initialize_bluetooth();
-        headtext.setText(headtextold +" "+ bluetoothAdapter.getAddress());
+        headtext.setText(headtextold + " " + bluetoothAdapter.getAddress());
         start_accepting_connection();
         initialize_clicks();
     }
@@ -147,9 +140,7 @@ public class BluetoothConnector extends AppCompatActivity{
         bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
         if (bluetoothAdapter == null){
             // Device doesn't support Bluetooth
-            Toast.makeText(getApplicationContext(),
-                           "Your Device doesn't support bluetooth", Toast.LENGTH_SHORT)
-                 .show();
+            Toast.makeText(getApplicationContext(), "Your Device doesn't support bluetooth", Toast.LENGTH_SHORT).show();
             finish();
         }
 

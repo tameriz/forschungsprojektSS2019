@@ -8,6 +8,7 @@ import androidx.room.Insert;
 import androidx.room.Query;
 import androidx.room.Update;
 
+//Data-Object for the PedometerHistory
 @Dao
 public interface PedometerHistoryDao{
     @Query("SELECT * FROM pedometerhistory")

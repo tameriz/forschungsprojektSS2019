@@ -7,6 +7,7 @@ import androidx.room.Room;
 import hs.f.forschungsprojektss2019.dao.InAppDatabase;
 import hs.f.forschungsprojektss2019.dao.PedometerHistory;
 
+//DbHelper for handle SQL
 public class DbHelper{
 
     InAppDatabase db;
